@@ -1,0 +1,302 @@
+Title,Description,Estimate,Labels,Priority,Status
+Initialize iOS Project,"Create new Xcode project with SwiftUI, configure app bundle ID, set minimum iOS version (iOS 15+)
+
+**Ticket ID:** PROJ-001
+**Dependencies:** None
+
+**Acceptance Criteria:**
+- Project builds successfully
+- App launches on simulator",2,Project Setup,Urgent,Backlog
+Set Up Project Structure,"Create folder structure (Models, Views, ViewModels, Services, Utilities), set up MVVM architecture pattern
+
+**Ticket ID:** PROJ-002
+**Dependencies:** PROJ-001
+
+**Acceptance Criteria:**
+- Clear folder structure exists
+- MVVM pattern established",3,Project Setup,Urgent,Backlog
+Add EPUB Parsing Library,"Research and integrate EPUB parsing library (e.g., ZIPFoundation + XMLParser, or FolioReaderKit), add to project dependencies
+
+**Ticket ID:** PROJ-003
+**Dependencies:** PROJ-001
+
+**Acceptance Criteria:**
+- Library integrated
+- Can parse EPUB file structure",3,Project Setup,Urgent,Backlog
+Implement EPUB File Import,"Add Files app integration using UIDocumentPickerViewController to allow users to select EPUB files from Files app or iCloud Drive
+
+**Ticket ID:** EPUB-001
+**Dependencies:** PROJ-002
+
+**Acceptance Criteria:**
+- User can tap button to import EPUB
+- File picker opens
+- EPUB files are selectable",5,EPUB Management,Urgent,Backlog
+Implement EPUB Storage,"Save imported EPUB files to app's Documents directory, create file management service to handle file operations
+
+**Ticket ID:** EPUB-002
+**Dependencies:** EPUB-001
+
+**Acceptance Criteria:**
+- EPUB files are saved to Documents directory
+- File paths are tracked",3,EPUB Management,Urgent,Backlog
+Create EPUB Metadata Model,"Create data model to store EPUB metadata (title, author, cover image, file path, import date)
+
+**Ticket ID:** EPUB-003
+**Dependencies:** PROJ-002
+
+**Acceptance Criteria:**
+- Data model exists with all required fields",2,EPUB Management,Urgent,Backlog
+Build Library View,"Create main screen showing list of all imported EPUBs with cover images, titles, and authors
+
+**Ticket ID:** EPUB-004
+**Dependencies:** EPUB-002, EPUB-003
+
+**Acceptance Criteria:**
+- Library view displays all imported EPUBs
+- Shows cover/title/author
+- Is scrollable",5,EPUB Management,Urgent,Backlog
+Implement EPUB Parsing Service,"Create service to parse EPUB files, extract chapters, extract text content, handle EPUB structure (OPF, NCX, HTML content)
+
+**Ticket ID:** EPUB-005
+**Dependencies:** PROJ-003, EPUB-002
+
+**Acceptance Criteria:**
+- Can parse EPUB structure
+- Extract chapters
+- Extract readable text content",8,EPUB Management,Urgent,Backlog
+Create Reader View Controller,"Build basic reader view using SwiftUI or UIKit to display EPUB content, handle scrolling
+
+**Ticket ID:** READ-001
+**Dependencies:** EPUB-005
+
+**Acceptance Criteria:**
+- Reader view displays EPUB content
+- User can scroll through text",5,Reader,Urgent,Backlog
+Implement Chapter Navigation,"Add ability to navigate between chapters, show chapter list, jump to specific chapter
+
+**Ticket ID:** READ-002
+**Dependencies:** READ-001
+
+**Acceptance Criteria:**
+- User can see chapter list
+- Can navigate to any chapter",5,Reader,High,Backlog
+Implement Text Styling,"Apply readable font, font size, line spacing, and text color to reader view
+
+**Ticket ID:** READ-003
+**Dependencies:** READ-001
+
+**Acceptance Criteria:**
+- Text is readable with appropriate styling
+- Font size is reasonable",3,Reader,High,Backlog
+Add Search UI,"Create search bar in reader view, add search input field and search button
+
+**Ticket ID:** SEARCH-001
+**Dependencies:** READ-001
+
+**Acceptance Criteria:**
+- Search bar appears in reader view
+- User can enter search text",3,Search,High,Backlog
+Implement Text Search,"Search through EPUB content for entered string, find all occurrences
+
+**Ticket ID:** SEARCH-002
+**Dependencies:** SEARCH-001, READ-001
+
+**Acceptance Criteria:**
+- Can search EPUB text
+- Finds all matches
+- Highlights results",5,Search,High,Backlog
+Implement Search Navigation,"Allow user to navigate between search results, jump to each occurrence
+
+**Ticket ID:** SEARCH-003
+**Dependencies:** SEARCH-002
+
+**Acceptance Criteria:**
+- User can tap search result to jump to that location
+- Can navigate next/previous",3,Search,High,Backlog
+Create Progress Data Model,"Design data model to store reading progress (book ID, chapter index, position/offset, last read date)
+
+**Ticket ID:** PROG-001
+**Dependencies:** EPUB-003
+
+**Acceptance Criteria:**
+- Progress model exists with all required fields",2,Progress Tracking,Urgent,Backlog
+Implement Progress Saving,"Save reading position when user navigates or closes reader, store in UserDefaults or Core Data
+
+**Ticket ID:** PROG-002
+**Dependencies:** PROG-001, READ-001
+
+**Acceptance Criteria:**
+- Reading position is saved when user leaves reader",3,Progress Tracking,Urgent,Backlog
+Implement Progress Restoration,"Restore reading position when user opens EPUB, jump to last read location
+
+**Ticket ID:** PROG-003
+**Dependencies:** PROG-002
+
+**Acceptance Criteria:**
+- When opening EPUB, reader jumps to last read position",3,Progress Tracking,Urgent,Backlog
+Add Progress Indicator,"Show visual indicator of reading progress (e.g., percentage, chapter indicator) in library and reader view
+
+**Ticket ID:** PROG-004
+**Dependencies:** PROG-002
+
+**Acceptance Criteria:**
+- Progress indicator visible in library and reader",2,Progress Tracking,Medium,Backlog
+Implement Sentence Detection,"Parse EPUB text into sentences, identify sentence boundaries, create sentence data structure with text and position
+
+**Ticket ID:** TTS-001
+**Dependencies:** EPUB-005
+
+**Acceptance Criteria:**
+- Can break EPUB text into individual sentences
+- Each sentence has position info",5,TTS Core,Urgent,Backlog
+Integrate AVSpeechSynthesizer,"Set up AVSpeechSynthesizer, configure voice settings, implement basic speak functionality
+
+**Ticket ID:** TTS-002
+**Dependencies:** PROJ-002
+
+**Acceptance Criteria:**
+- Can synthesize speech from text string
+- Audio plays",3,TTS Core,Urgent,Backlog
+Implement Tap-to-Read,"Detect tap on sentence in reader view, start TTS from that sentence
+
+**Ticket ID:** TTS-003
+**Dependencies:** TTS-001, TTS-002, READ-001
+
+**Acceptance Criteria:**
+- User can tap sentence
+- TTS starts reading from that sentence",5,TTS Core,Urgent,Backlog
+Add Play/Pause Controls,"Create play/pause button, implement control logic to start/stop TTS
+
+**Ticket ID:** TTS-004
+**Dependencies:** TTS-003
+
+**Acceptance Criteria:**
+- Play/pause button works
+- Can start and stop TTS",3,TTS Core,Urgent,Backlog
+Implement Sentence Highlighting,"Highlight current sentence being read during TTS playback
+
+**Ticket ID:** TTS-005
+**Dependencies:** TTS-003
+
+**Acceptance Criteria:**
+- Current sentence is highlighted while being read",5,TTS Core,High,Backlog
+Handle TTS Completion,"Detect when sentence finishes, automatically move to next sentence, continue reading
+
+**Ticket ID:** TTS-006
+**Dependencies:** TTS-003
+
+**Acceptance Criteria:**
+- When sentence finishes, automatically starts next sentence",5,TTS Core,Urgent,Backlog
+Add Speed Control UI,"Create UI control (slider or buttons) to adjust TTS playback speed (0.5x to 2.0x)
+
+**Ticket ID:** TTS-007
+**Dependencies:** TTS-004
+
+**Acceptance Criteria:**
+- Speed control UI exists
+- User can see current speed",3,TTS Speed,High,Backlog
+Implement Speed Adjustment,"Apply speed setting to AVSpeechSynthesizer rate property, persist speed preference
+
+**Ticket ID:** TTS-008
+**Dependencies:** TTS-007, TTS-002
+
+**Acceptance Criteria:**
+- Speed changes affect TTS playback
+- Preference is saved",3,TTS Speed,High,Backlog
+Configure Audio Session,"Set up AVAudioSession with .playback category, configure for background audio, handle interruptions
+
+**Ticket ID:** BG-001
+**Dependencies:** TTS-002
+
+**Acceptance Criteria:**
+- Audio session configured
+- Supports background playback",5,Background Audio,Urgent,Backlog
+Implement Background Audio Support,"Ensure TTS continues playing when app goes to background or device is locked
+
+**Ticket ID:** BG-002
+**Dependencies:** BG-001, TTS-006
+
+**Acceptance Criteria:**
+- TTS continues playing when phone is locked or app backgrounded",5,Background Audio,Urgent,Backlog
+Add Lock Screen Controls,"Implement MPNowPlayingInfoCenter to show book info and controls on lock screen
+
+**Ticket ID:** BG-003
+**Dependencies:** BG-002
+
+**Acceptance Criteria:**
+- Lock screen shows book title
+- Play/pause controls work",5,Background Audio,High,Backlog
+Design Audio Queue System,"Design architecture for pre-generating audio, queue management system, buffer strategy (3-5 sentences ahead)
+
+**Ticket ID:** SEAMLESS-001
+**Dependencies:** TTS-006
+
+**Acceptance Criteria:**
+- Queue system architecture designed and documented",5,Seamless TTS,Urgent,Backlog
+Implement Audio Pre-generation,"Pre-generate audio for upcoming sentences in background queue while current sentence plays
+
+**Ticket ID:** SEAMLESS-002
+**Dependencies:** SEAMLESS-001, TTS-001, TTS-002
+
+**Acceptance Criteria:**
+- Audio for next 3-5 sentences is pre-generated while reading",8,Seamless TTS,Urgent,Backlog
+Implement Seamless Playback,"Play pre-generated audio seamlessly, transition between sentences without gaps or delays
+
+**Ticket ID:** SEAMLESS-003
+**Dependencies:** SEAMLESS-002
+
+**Acceptance Criteria:**
+- Sentences play seamlessly without noticeable gaps or delays",8,Seamless TTS,Urgent,Backlog
+Handle Queue Management,"Manage audio queue, handle buffer underruns, refill queue as needed, handle user navigation (skip/jump)
+
+**Ticket ID:** SEAMLESS-004
+**Dependencies:** SEAMLESS-003
+
+**Acceptance Criteria:**
+- Queue stays filled
+- Handles navigation without breaking playback",8,Seamless TTS,Urgent,Backlog
+Optimize Memory Management,"Ensure pre-generated audio doesn't consume excessive memory, implement cleanup for old audio files
+
+**Ticket ID:** SEAMLESS-005
+**Dependencies:** SEAMLESS-002
+
+**Acceptance Criteria:**
+- Memory usage is reasonable
+- Old audio is cleaned up",5,Seamless TTS,High,Backlog
+Design App Icon,"Create app icon for App Store submission
+
+**Ticket ID:** UI-001
+**Dependencies:** PROJ-001
+
+**Acceptance Criteria:**
+- App icon created and added to project",2,UI/UX,Medium,Backlog
+Polish Reader UI,"Improve reader UI aesthetics, ensure good readability, add proper spacing and margins
+
+**Ticket ID:** UI-002
+**Dependencies:** READ-003
+
+**Acceptance Criteria:**
+- Reader UI looks polished and professional",3,UI/UX,Medium,Backlog
+Add Loading States,"Show loading indicators when importing EPUBs, parsing content, or generating audio
+
+**Ticket ID:** UI-003
+**Dependencies:** EPUB-001, EPUB-005, SEAMLESS-002
+
+**Acceptance Criteria:**
+- Loading states shown for all async operations",3,UI/UX,High,Backlog
+Add Error Handling,"Handle and display errors for file import failures, parsing errors, TTS errors
+
+**Ticket ID:** UI-004
+**Dependencies:** EPUB-001, EPUB-005, TTS-002
+
+**Acceptance Criteria:**
+- Errors are caught and displayed to user with helpful messages",5,UI/UX,High,Backlog
+Implement Settings Screen,"Create settings screen for TTS preferences (default speed, voice selection), app preferences
+
+**Ticket ID:** UI-005
+**Dependencies:** TTS-008
+
+**Acceptance Criteria:**
+- Settings screen exists
+- Can change TTS preferences",3,UI/UX,Medium,Backlog
