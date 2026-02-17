@@ -13,6 +13,7 @@ enum EPUBFileManagerError: LocalizedError {
     case fileCopyFailed(Error)
     case fileNotFound
     case invalidURL
+    case duplicateFile
     
     var errorDescription: String? {
         switch self {
@@ -26,6 +27,8 @@ enum EPUBFileManagerError: LocalizedError {
             return "File not found"
         case .invalidURL:
             return "Invalid file URL"
+        case .duplicateFile:
+            return "A file with this name already exists"
         }
     }
 }
@@ -60,8 +63,9 @@ class EPUBFileManager {
     
     /// Save an EPUB file from the imported URL to the Documents directory
     /// - Parameter url: The URL of the imported EPUB file
+    /// - Parameter allowDuplicates: If false, rejects files with duplicate names. Default is false.
     /// - Returns: Result containing the destination URL on success, or an error on failure
-    func saveEPUB(from url: URL) -> Result<URL, Error> {
+    func saveEPUB(from url: URL, allowDuplicates: Bool = false) -> Result<URL, Error> {
         // Ensure we can access the file
         guard url.startAccessingSecurityScopedResource() else {
             return .failure(EPUBFileManagerError.invalidURL)
@@ -70,10 +74,15 @@ class EPUBFileManager {
         
         do {
             let epubDirectory = try getEPUBsDirectory()
-            
-            // Generate unique filename to avoid conflicts
             let originalFilename = url.lastPathComponent
-            let filename = generateUniqueFilename(from: originalFilename)
+            
+            // Check for duplicates if not allowed
+            if !allowDuplicates && isDuplicate(filename: originalFilename) {
+                return .failure(EPUBFileManagerError.duplicateFile)
+            }
+            
+            // Use original filename if duplicates allowed, otherwise generate unique name
+            let filename = allowDuplicates ? originalFilename : generateUniqueFilename(from: originalFilename)
             let destinationURL = epubDirectory.appendingPathComponent(filename)
             
             // Copy file to destination
@@ -88,6 +97,22 @@ class EPUBFileManager {
             if let epubError = error as? EPUBFileManagerError {
                 return .failure(epubError)
             }
+            return .failure(EPUBFileManagerError.fileCopyFailed(error))
+        }
+    }
+    
+    /// Delete an EPUB file
+    /// - Parameter url: The URL of the EPUB file to delete
+    /// - Returns: Result indicating success or failure
+    func deleteEPUB(at url: URL) -> Result<Void, Error> {
+        guard fileExists(at: url) else {
+            return .failure(EPUBFileManagerError.fileNotFound)
+        }
+        
+        do {
+            try fileManager.removeItem(at: url)
+            return .success(())
+        } catch {
             return .failure(EPUBFileManagerError.fileCopyFailed(error))
         }
     }
@@ -120,6 +145,18 @@ class EPUBFileManager {
     /// - Returns: True if the file exists, false otherwise
     func fileExists(at url: URL) -> Bool {
         return fileManager.fileExists(atPath: url.path)
+    }
+    
+    /// Check if a file with the given filename already exists (duplicate check)
+    /// - Parameter filename: The filename to check
+    /// - Returns: True if a file with this name exists, false otherwise
+    func isDuplicate(filename: String) -> Bool {
+        guard let epubDirectory = try? getEPUBsDirectory() else {
+            return false
+        }
+        
+        let fileURL = epubDirectory.appendingPathComponent(filename)
+        return fileExists(at: fileURL)
     }
     
     /// Generate a unique filename to avoid conflicts

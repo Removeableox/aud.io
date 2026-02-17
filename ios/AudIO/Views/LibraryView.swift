@@ -19,7 +19,7 @@ struct LibraryView: View {
     var body: some View {
         NavigationView {
             Group {
-                if viewModel.storedEPUBs.isEmpty {
+                if viewModel.epubMetadata.isEmpty {
                     emptyStateView
                 } else {
                     scrollableGridView
@@ -41,6 +41,65 @@ struct LibraryView: View {
                     viewModel.handleDocumentPicked(url: url)
                 }
             }
+            .sheet(isPresented: $viewModel.showRenameSheet) {
+                if let metadata = viewModel.selectedMetadata {
+                    RenameBookSheet(
+                        metadata: metadata,
+                        isPresented: $viewModel.showRenameSheet,
+                        onSave: { newTitle in
+                            viewModel.renameBook(id: metadata.id, newTitle: newTitle)
+                        }
+                    )
+                }
+            }
+            .sheet(isPresented: $viewModel.showImagePicker) {
+                if let metadata = viewModel.selectedMetadata {
+                    CoverImagePicker(isPresented: $viewModel.showImagePicker) { image in
+                        viewModel.handleImageSelected(image)
+                    }
+                }
+            }
+            .sheet(isPresented: $viewModel.showCropView) {
+                if let image = viewModel.imageToCrop {
+                    CropImageView(
+                        image: image,
+                        isPresented: $viewModel.showCropView,
+                        onCrop: { croppedImage in
+                            viewModel.handleImageCropped(croppedImage)
+                        }
+                    )
+                }
+            }
+            .alert("Delete Book", isPresented: $viewModel.showDeleteConfirmation) {
+                Button("Cancel", role: .cancel) {
+                    viewModel.metadataToDelete = nil
+                }
+                Button("Delete", role: .destructive) {
+                    viewModel.confirmDelete()
+                }
+            } message: {
+                if let metadata = viewModel.metadataToDelete {
+                    Text("Are you sure you want to delete '\(metadata.displayTitle)'? This action cannot be undone.")
+                }
+            }
+            .alert("Error", isPresented: .constant(viewModel.importError != nil)) {
+                Button("OK") {
+                    viewModel.clearMessages()
+                }
+            } message: {
+                if let error = viewModel.importError {
+                    Text(error)
+                }
+            }
+            .alert("Success", isPresented: .constant(viewModel.importSuccessMessage != nil)) {
+                Button("OK") {
+                    viewModel.clearMessages()
+                }
+            } message: {
+                if let message = viewModel.importSuccessMessage {
+                    Text(message)
+                }
+            }
         }
     }
     
@@ -54,8 +113,7 @@ struct LibraryView: View {
                 .foregroundStyle(.secondary)
             
             Text("No Books Yet")
-                .font(.title2)
-                .fontWeight(.semibold)
+                .font(.system(size: 22, weight: .semibold))
             
             Text("Import your first EPUB to get started")
                 .font(.subheadline)
@@ -83,8 +141,8 @@ struct LibraryView: View {
     private var scrollableGridView: some View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 20) {
-                ForEach(viewModel.storedEPUBs, id: \.self) { epubURL in
-                    EPUBCard(epubURL: epubURL)
+                ForEach(viewModel.epubMetadata) { metadata in
+                    EPUBCard(metadata: metadata, viewModel: viewModel)
                 }
             }
             .padding()
@@ -95,53 +153,126 @@ struct LibraryView: View {
 // MARK: - EPUB Card
 
 struct EPUBCard: View {
-    let epubURL: URL
+    let metadata: EPUBMetadata
+    let viewModel: LibraryViewModel
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            // Cover placeholder
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.accentColor.opacity(0.1))
-                    .aspectRatio(2/3, contentMode: .fit)
-                
-                Image(systemName: "book.closed.fill")
-                    .font(.system(size: 40))
-                    .foregroundStyle(Color.accentColor)
-            }
-            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+            // Cover image or placeholder
+            coverImageView
+                .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
             
-            // Title (filename without extension)
-            Text(displayTitle)
-                .font(.subheadline)
-                .fontWeight(.medium)
+            // Title
+            Text(metadata.displayTitle)
+                .font(.system(size: 15, weight: .medium))
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
             
-            // Subtitle (file size or date)
-            Text(fileSizeString)
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
+            // Author or file size
+            if let author = metadata.author, !author.isEmpty {
+                Text(author)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            } else {
+                Text(fileSizeString)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
         .onTapGesture {
             // TODO: Navigate to reader view
-            print("Tapped EPUB: \(epubURL.lastPathComponent)")
+            print("Tapped EPUB: \(metadata.displayTitle)")
+        }
+        .contextMenu {
+            Button(action: {
+                viewModel.prepareRename(for: metadata)
+            }) {
+                Label("Rename", systemImage: "pencil")
+            }
+            
+            Button(action: {
+                viewModel.prepareAddCover(for: metadata)
+            }) {
+                Label("Change Cover", systemImage: "photo")
+            }
+            
+            Divider()
+            
+            Button(role: .destructive, action: {
+                viewModel.prepareDelete(for: metadata)
+            }) {
+                Label("Delete", systemImage: "trash")
+            }
+        }
+    }
+    
+    // MARK: - Cover Image View
+    
+    private var coverImageView: some View {
+        Group {
+            if let coverURL = metadata.coverImageURL,
+               let imageData = try? Data(contentsOf: coverURL),
+               let uiImage = UIImage(data: imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .aspectRatio(2/3, contentMode: .fill)
+                    .clipped()
+                    .cornerRadius(8)
+                    .onAppear {
+                        // #region agent log
+                        let logPath = "/Users/calebcosta/coding/aud.io/.cursor/debug.log"
+                        let coverPath = metadata.coverImagePath ?? "nil"
+                        let fileExists = FileManager.default.fileExists(atPath: coverURL.path)
+                        if let logData = "{\"id\":\"log_\(UUID().uuidString)\",\"timestamp\":\(Int(Date().timeIntervalSince1970 * 1000)),\"location\":\"LibraryView.coverImageView\",\"message\":\"Rendering cover\",\"data\":{\"bookId\":\"\(metadata.id.uuidString)\",\"coverImagePath\":\"\(coverPath)\",\"coverURL\":\"\(coverURL.path)\",\"fileExists\":\(fileExists)},\"runId\":\"run1\",\"hypothesisId\":\"D\"}\n".data(using: .utf8),
+                           let fileHandle = FileHandle(forWritingAtPath: logPath) {
+                            fileHandle.seekToEndOfFile()
+                            fileHandle.write(logData)
+                            fileHandle.closeFile()
+                        } else if let logData = "{\"id\":\"log_\(UUID().uuidString)\",\"timestamp\":\(Int(Date().timeIntervalSince1970 * 1000)),\"location\":\"LibraryView.coverImageView\",\"message\":\"Rendering cover\",\"data\":{\"bookId\":\"\(metadata.id.uuidString)\",\"coverImagePath\":\"\(coverPath)\",\"coverURL\":\"\(coverURL.path)\",\"fileExists\":\(fileExists)},\"runId\":\"run1\",\"hypothesisId\":\"D\"}\n".data(using: .utf8) {
+                            try? logData.write(to: URL(fileURLWithPath: logPath), options: [])
+                        }
+                        // #endregion
+                    }
+            } else {
+                // Placeholder
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(Color.accentColor.opacity(0.1))
+                        .aspectRatio(2/3, contentMode: .fit)
+                    
+                    Image(systemName: "book.closed.fill")
+                        .font(.system(size: 40))
+                        .foregroundStyle(Color.accentColor)
+                }
+                .onAppear {
+                    // #region agent log
+                    let logPath = "/Users/calebcosta/coding/aud.io/.cursor/debug.log"
+                    let coverPath = metadata.coverImagePath ?? "nil"
+                    let coverURL = metadata.coverImageURL
+                    let fileExists = coverURL != nil ? FileManager.default.fileExists(atPath: coverURL!.path) : false
+                    if let logData = "{\"id\":\"log_\(UUID().uuidString)\",\"timestamp\":\(Int(Date().timeIntervalSince1970 * 1000)),\"location\":\"LibraryView.coverImageView\",\"message\":\"Showing placeholder\",\"data\":{\"bookId\":\"\(metadata.id.uuidString)\",\"coverPath\":\"\(coverPath)\",\"hasCoverURL\":\(coverURL != nil),\"fileExists\":\(fileExists)},\"runId\":\"run1\",\"hypothesisId\":\"D\"}\n".data(using: .utf8),
+                       let fileHandle = FileHandle(forWritingAtPath: logPath) {
+                        fileHandle.seekToEndOfFile()
+                        fileHandle.write(logData)
+                        fileHandle.closeFile()
+                    } else if let logData = "{\"id\":\"log_\(UUID().uuidString)\",\"timestamp\":\(Int(Date().timeIntervalSince1970 * 1000)),\"location\":\"LibraryView.coverImageView\",\"message\":\"Showing placeholder\",\"data\":{\"bookId\":\"\(metadata.id.uuidString)\",\"coverPath\":\"\(coverPath)\",\"hasCoverURL\":\(coverURL != nil),\"fileExists\":\(fileExists)},\"runId\":\"run1\",\"hypothesisId\":\"D\"}\n".data(using: .utf8) {
+                        try? logData.write(to: URL(fileURLWithPath: logPath), options: [])
+                    }
+                    // #endregion
+                }
+            }
         }
     }
     
     // MARK: - Helpers
     
-    private var displayTitle: String {
-        let filename = epubURL.lastPathComponent
-        let nameWithoutExtension = (filename as NSString).deletingPathExtension
-        return nameWithoutExtension
-    }
-    
     private var fileSizeString: String {
-        guard let attributes = try? FileManager.default.attributesOfItem(atPath: epubURL.path),
+        let fileURL = URL(fileURLWithPath: metadata.filePath)
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: fileURL.path),
               let fileSize = attributes[.size] as? Int64 else {
             return ""
         }
@@ -150,6 +281,58 @@ struct EPUBCard: View {
         formatter.allowedUnits = [.useKB, .useMB]
         formatter.countStyle = .file
         return formatter.string(fromByteCount: fileSize)
+    }
+}
+
+// MARK: - Rename Book Sheet
+
+struct RenameBookSheet: View {
+    let metadata: EPUBMetadata
+    @Binding var isPresented: Bool
+    let onSave: (String) -> Void
+    
+    @State private var newTitle: String
+    @FocusState private var isTextFieldFocused: Bool
+    
+    init(metadata: EPUBMetadata, isPresented: Binding<Bool>, onSave: @escaping (String) -> Void) {
+        self.metadata = metadata
+        self._isPresented = isPresented
+        self.onSave = onSave
+        _newTitle = State(initialValue: metadata.displayTitle)
+    }
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section {
+                    TextField("Book Title", text: $newTitle)
+                        .focused($isTextFieldFocused)
+                } header: {
+                    Text("Rename Book")
+                } footer: {
+                    Text("Enter a custom title for this book. Leave empty to use the original title.")
+                }
+            }
+            .navigationTitle("Rename Book")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button("Cancel") {
+                        isPresented = false
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Save") {
+                        onSave(newTitle)
+                        isPresented = false
+                    }
+                    .font(.system(size: 17, weight: .semibold))
+                }
+            }
+            .onAppear {
+                isTextFieldFocused = true
+            }
+        }
     }
 }
 

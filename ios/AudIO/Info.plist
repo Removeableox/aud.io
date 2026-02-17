@@ -52,5 +52,7 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<false/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>AudIO needs access to your photo library to add custom covers to your books.</string>
 </dict>
 </plist>
