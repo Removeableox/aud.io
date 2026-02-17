@@ -19,6 +19,9 @@
 		J5K6L7M89012345678901234 /* CoverImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = K6L7M8901234567890123456 /* CoverImageManager.swift */; };
 		K7L8M90123456789012345678 /* CoverImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = L8M9012345678901234567890 /* CoverImagePicker.swift */; };
 		M9N0123456789012345678901 /* CropImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = N01234567890123456789012 /* CropImageView.swift */; };
+		O1P2Q3R4S5T6789012345678 /* ReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = P2Q3R4S5T678901234567890 /* ReaderView.swift */; };
+		Q3R4S5T6789012345678901 /* Chapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = R4S5T6789012345678901234 /* Chapter.swift */; };
+		S5T678901234567890123456 /* ReaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = T678901234567890123456789 /* ReaderViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +39,9 @@
 		K6L7M8901234567890123456 /* CoverImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImageManager.swift; sourceTree = "<group>"; };
 		L8M9012345678901234567890 /* CoverImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImagePicker.swift; sourceTree = "<group>"; };
 		N01234567890123456789012 /* CropImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImageView.swift; sourceTree = "<group>"; };
+		P2Q3R4S5T678901234567890 /* ReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderView.swift; sourceTree = "<group>"; };
+		R4S5T6789012345678901234 /* Chapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chapter.swift; sourceTree = "<group>"; };
+		T678901234567890123456789 /* ReaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +78,7 @@
 				B2C3D4E5F678901234567890 /* DocumentPickerView.swift */,
 				L8M9012345678901234567890 /* CoverImagePicker.swift */,
 				N01234567890123456789012 /* CropImageView.swift */,
+				P2Q3R4S5T678901234567890 /* ReaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -80,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				H2I3J4K5L6M7890123456789 /* EPUBMetadata.swift */,
+				R4S5T6789012345678901234 /* Chapter.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -88,6 +96,7 @@
 			isa = PBXGroup;
 			children = (
 				D4E5F6789012345678901234 /* LibraryViewModel.swift */,
+				T678901234567890123456789 /* ReaderViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -200,6 +209,9 @@
 				J5K6L7M89012345678901234 /* CoverImageManager.swift in Sources */,
 				G1H2I3J4K5L6M789012345678 /* EPUBMetadata.swift in Sources */,
 				M9N0123456789012345678901 /* CropImageView.swift in Sources */,
+				O1P2Q3R4S5T6789012345678 /* ReaderView.swift in Sources */,
+				Q3R4S5T6789012345678901 /* Chapter.swift in Sources */,
+				S5T678901234567890123456 /* ReaderViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
