@@ -10,6 +10,9 @@
 		5FF80C10A7254F649E080DF6 /* AudIOApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F9A2FBDCF147A48F01C6AE /* AudIOApp.swift */; };
 		0EFB1A20CC4146779503AD6D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44F5F6430BDE4987B07C1FC1 /* ContentView.swift */; };
 		E42BE8B07BB646428FFB3577 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E42BE8B07BB646428FFB3576 /* Assets.xcassets */; };
+		A1B2C3D4E5F6789012345678 /* DocumentPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F678901234567890 /* DocumentPickerView.swift */; };
+		C3D4E5F67890123456789012 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6789012345678901234 /* LibraryViewModel.swift */; };
+		E5F6789012345678901234567 /* EPUBFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6789012345678901234567890 /* EPUBFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -18,6 +21,9 @@
 		44F5F6430BDE4987B07C1FC1 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7A0249B0706743629BEB322B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E42BE8B07BB646428FFB3576 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B2C3D4E5F678901234567890 /* DocumentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView.swift; sourceTree = "<group>"; };
+		D4E5F6789012345678901234 /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
+		F6789012345678901234567890 /* EPUBFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPUBFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +56,7 @@
 			isa = PBXGroup;
 			children = (
 				44F5F6430BDE4987B07C1FC1 /* ContentView.swift */,
+				B2C3D4E5F678901234567890 /* DocumentPickerView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -64,6 +71,7 @@
 		B70EB8FBCCCE4CF1A3B522EB /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				D4E5F6789012345678901234 /* LibraryViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -71,6 +79,7 @@
 		B65D72ABA99D4294958BE9C0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F6789012345678901234567890 /* EPUBFileManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -164,6 +173,9 @@
 			files = (
 				5FF80C10A7254F649E080DF6 /* AudIOApp.swift in Sources */,
 				0EFB1A20CC4146779503AD6D /* ContentView.swift in Sources */,
+				A1B2C3D4E5F6789012345678 /* DocumentPickerView.swift in Sources */,
+				C3D4E5F67890123456789012 /* LibraryViewModel.swift in Sources */,
+				E5F6789012345678901234567 /* EPUBFileManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
