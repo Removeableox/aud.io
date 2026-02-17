@@ -14,6 +14,11 @@
 		C3D4E5F67890123456789012 /* LibraryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6789012345678901234 /* LibraryViewModel.swift */; };
 		E5F6789012345678901234567 /* EPUBFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6789012345678901234567890 /* EPUBFileManager.swift */; };
 		F1A2B3C4D5E6F789012345678 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2B3C4D5E6F7890123456789 /* LibraryView.swift */; };
+		G1H2I3J4K5L6M789012345678 /* EPUBMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = H2I3J4K5L6M7890123456789 /* EPUBMetadata.swift */; };
+		I3J4K5L6M789012345678901 /* MetadataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = J4K5L6M7890123456789012 /* MetadataService.swift */; };
+		J5K6L7M89012345678901234 /* CoverImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = K6L7M8901234567890123456 /* CoverImageManager.swift */; };
+		K7L8M90123456789012345678 /* CoverImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = L8M9012345678901234567890 /* CoverImagePicker.swift */; };
+		M9N0123456789012345678901 /* CropImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = N01234567890123456789012 /* CropImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +31,11 @@
 		B2C3D4E5F678901234567890 /* DocumentPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentPickerView.swift; sourceTree = "<group>"; };
 		D4E5F6789012345678901234 /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
 		F6789012345678901234567890 /* EPUBFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPUBFileManager.swift; sourceTree = "<group>"; };
+		H2I3J4K5L6M7890123456789 /* EPUBMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPUBMetadata.swift; sourceTree = "<group>"; };
+		J4K5L6M7890123456789012 /* MetadataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetadataService.swift; sourceTree = "<group>"; };
+		K6L7M8901234567890123456 /* CoverImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImageManager.swift; sourceTree = "<group>"; };
+		L8M9012345678901234567890 /* CoverImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoverImagePicker.swift; sourceTree = "<group>"; };
+		N01234567890123456789012 /* CropImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CropImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +70,8 @@
 				44F5F6430BDE4987B07C1FC1 /* ContentView.swift */,
 				A2B3C4D5E6F7890123456789 /* LibraryView.swift */,
 				B2C3D4E5F678901234567890 /* DocumentPickerView.swift */,
+				L8M9012345678901234567890 /* CoverImagePicker.swift */,
+				N01234567890123456789012 /* CropImageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -67,6 +79,7 @@
 		78165B1FFBB144D6908F3101 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				H2I3J4K5L6M7890123456789 /* EPUBMetadata.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -83,6 +96,8 @@
 			isa = PBXGroup;
 			children = (
 				F6789012345678901234567890 /* EPUBFileManager.swift */,
+				J4K5L6M7890123456789012 /* MetadataService.swift */,
+				K6L7M8901234567890123456 /* CoverImageManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -178,8 +193,13 @@
 				0EFB1A20CC4146779503AD6D /* ContentView.swift in Sources */,
 				A1B2C3D4E5F6789012345678 /* DocumentPickerView.swift in Sources */,
 				F1A2B3C4D5E6F789012345678 /* LibraryView.swift in Sources */,
+				K7L8M90123456789012345678 /* CoverImagePicker.swift in Sources */,
 				C3D4E5F67890123456789012 /* LibraryViewModel.swift in Sources */,
 				E5F6789012345678901234567 /* EPUBFileManager.swift in Sources */,
+				I3J4K5L6M789012345678901 /* MetadataService.swift in Sources */,
+				J5K6L7M89012345678901234 /* CoverImageManager.swift in Sources */,
+				G1H2I3J4K5L6M789012345678 /* EPUBMetadata.swift in Sources */,
+				M9N0123456789012345678901 /* CropImageView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
