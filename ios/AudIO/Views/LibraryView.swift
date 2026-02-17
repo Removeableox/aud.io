@@ -142,7 +142,10 @@ struct LibraryView: View {
         ScrollView {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(viewModel.epubMetadata) { metadata in
-                    EPUBCard(metadata: metadata, viewModel: viewModel)
+                    NavigationLink(destination: ReaderView(metadata: metadata)) {
+                        EPUBCard(metadata: metadata, viewModel: viewModel)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
             .padding()
@@ -183,10 +186,6 @@ struct EPUBCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
-        .onTapGesture {
-            // TODO: Navigate to reader view
-            print("Tapped EPUB: \(metadata.displayTitle)")
-        }
         .contextMenu {
             Button(action: {
                 viewModel.prepareRename(for: metadata)
