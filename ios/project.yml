@@ -1,0 +1,46 @@
+name: AudIO
+options:
+  bundleIdPrefix: com.audio
+  deploymentTarget:
+    iOS: "15.0"
+  developmentLanguage: en
+  xcodeVersion: "15.0"
+
+packages: {}
+
+targets:
+  AudIO:
+    type: application
+    platform: iOS
+    deploymentTarget: "15.0"
+    sources:
+      - path: AudIO
+    settings:
+      PRODUCT_BUNDLE_IDENTIFIER: com.audio.AudIO
+      SWIFT_VERSION: "5.0"
+      IPHONEOS_DEPLOYMENT_TARGET: "15.0"
+      TARGETED_DEVICE_FAMILY: "1" # iPhone only
+      ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+    info:
+      path: AudIO/Info.plist
+      properties:
+        CFBundleDisplayName: AudIO
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+
+schemes:
+  AudIO:
+    build:
+      targets:
+        AudIO: all
+    run:
+      config: Debug
+    test:
+      config: Debug
